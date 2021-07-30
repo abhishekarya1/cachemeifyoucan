@@ -1,4 +1,4 @@
-# 📓 cachemeifyoucan
+# 📓 cachemeifyoucan!
 Simple link shortener with powerful and efficient webpage archive.
 
 <span style="display:inline-block;">
@@ -11,9 +11,9 @@ Simple link shortener with powerful and efficient webpage archive.
 Shortened links that redirects to the original. If the original is down, a cached version of the webpage is displayed.
 
 ### Built With
-- Flask
-- Redis
-- Heroku
+- [Flask](https://flask.palletsprojects.com/en/2.0.x/)
+- [Redis](https://redis.io/)
+- [Heroku](https://www.heroku.com/)
 
 ### Libraries used
 - [Hashids](https://pypi.org/project/hashids/)
@@ -23,15 +23,15 @@ Shortened links that redirects to the original. If the original is down, a cache
 - In-memory data store
 - Webpage scraping
 - HTML templating
-- Character encodings
+- Character encodings (bytes and strings)
 
 ### Endpoints
-`/` : A link is input on the page by the user and all `style` and `scripts` are stripped from it, only plain HTML is kept, hyperlinks are disabled too. The plain HTML code is then encoded using [base64encoding](https://docs.python.org/3/library/base64.html). The base64code is searched in data store and if found, a previously generated shortid is returned to the user. If this is the first time that link is being shortened, then a shortid is generated (using Hashids library) based on the current timestamp and added to data store alongwith link and base64code.
+**/** (`GET`, `POST`) : A link is input on the page by the user and all `<style>` and `<script>` are stripped from it, only plain HTML is kept, hyperlinks are disabled too. The plain HTML code is then encoded using [base64encoding](https://docs.python.org/3/library/base64.html). The `b64_code` is searched in data store and if found, a previously generated `shortid` is returned to the user. If this is the first time that link is being shortened, then a `shortie` is generated (using Hashids library) based on the current timestamp and added to data store alongwith `link` and `b64_code`.
 
-The link, shortid, and base64code is stored to redis following the given schema:
+The `link`, `shortid`, and `b64_code` is stored to redis following the given schema:
 ![redis_schema](/static/images/redis_schema.png)
 
-`/shortid` : shortid from the link is lookedup in data store and if not found an "Invalid shortlink!" message is shown to the user. If a valid shortid is found, then the corresponding base64code and link values are fetched. If the fetched link is up (returns a success response code) then user is redirected to it, else base64code fetched from store is decoded to display cached version of the webpage.
+**/shortid** (`GET`) : `shortid` from the link is lookedup in data store and if not found an "Invalid shortlink!" message is shown to the user. If a valid `shortid` is found, then the corresponding `b64_code` and link values are fetched. If the fetched link is up (returns a success response code 200) then user is redirected to it, else `b64_code` fetched from store is decoded to display cached version of the webpage.
 
 
 ### References
@@ -41,12 +41,11 @@ The link, shortid, and base64code is stored to redis following the given schema:
 - [Guide to Parsing HTML with BeautifulSoup in Python](https://stackabuse.com/guide-to-parsing-html-with-beautifulsoup-in-python)
 
 ### Acknowledgements
-- [Original idea on HN](https://bit.ly/2H8hMOI)
+- [Original idea of base64 encoding on HN](https://news.ycombinator.com/item?id=2464213)
 - [URL shortener design and hashids usage](https://www.digitalocean.com/community/tutorials/how-to-make-a-url-shortener-with-flask-and-sqlite)
-- [original bs4 method - bumpkin's answer](https://stackoverflow.com/questions/1936466/beautifulsoup-grab-visible-webpage-text)
-- [A similar tool](https://archive.is/)
-
+- [Original bs4 html scraping method - bumpkin's answer](https://stackoverflow.com/questions/1936466/beautifulsoup-grab-visible-webpage-text)
 
 ### Further
+- [A similar tool](https://archive.is/)
 - Save page as an image or pdf format (maybe)
 - Add option to view cached page before redirect

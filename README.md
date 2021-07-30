@@ -3,8 +3,8 @@ Simple link shortener with powerful and efficient webpage archive.
 
 <span style="display:inline-block;">
 <!-- <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg"> &emsp;&ensp; -->
-<img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg" width="300px"> &emsp;&ensp;
-<img src="https://upload.wikimedia.org/wikipedia/en/6/6b/Redis_Logo.svg" width="295px"> &emsp;&ensp;
+<img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Flask_logo.svg" width="300px"> &emsp;&ensp;&emsp;&ensp;&emsp;
+<img src="https://upload.wikimedia.org/wikipedia/en/6/6b/Redis_Logo.svg" width="295px">
 </span>
 
 ### About
@@ -26,12 +26,12 @@ Shortened links that redirects to the original. If the original is down, a cache
 - Character encodings
 
 ### Endpoints
-`/` : A link is input on the page by the user and all `style` and `scripts` are stripped from it, only plain HTML is there, hyperlinks are disabled too. The plain HTML code is then encoded using [base64encoding](https://docs.python.org/3/library/base64.html). The link is lookedup in data store and if found, a previously generated shortid is returned to the user. If this is the first time that link is being shortened, then a shortid is generated (using Hashids library) based on the current timestamp. 
+`/` : A link is input on the page by the user and all `style` and `scripts` are stripped from it, only plain HTML is kept, hyperlinks are disabled too. The plain HTML code is then encoded using [base64encoding](https://docs.python.org/3/library/base64.html). The base64code is searched in data store and if found, a previously generated shortid is returned to the user. If this is the first time that link is being shortened, then a shortid is generated (using Hashids library) based on the current timestamp and added to data store alongwith link and base64code.
 
 The link, shortid, and base64code is stored to redis following the given schema:
 ![redis_schema]()
 
-`/shortid` : shortid from the link is lookedup in data store and if not found an "Invalid shortlink!" message is shown to the user. If a valid shortid is found, then the corresponding link value is fetched. If this link is up (returns a success response code) then user is redirected to it, else base64code is fetched from store and decoded to display cached version of the page.
+`/shortid` : shortid from the link is lookedup in data store and if not found an "Invalid shortlink!" message is shown to the user. If a valid shortid is found, then the corresponding base64code and link values are fetched. If the fetched link is up (returns a success response code) then user is redirected to it, else base64code fetched from store is decoded to display cached version of the webpage.
 
 
 ### References
@@ -50,4 +50,3 @@ The link, shortid, and base64code is stored to redis following the given schema:
 ### Further
 - Save page as an image or pdf format (maybe)
 - Add option to view cached page before redirect
-- No shortid change for duplicate URLs can be a problem

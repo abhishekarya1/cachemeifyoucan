@@ -4,7 +4,7 @@
 [x] Modularize code into functions
 [x] Merge index methods
 
-[ ] Documentation and brief about techniques involved
+[x] Documentation and brief about techniques involved
 
 [ ] Frontend Development
 

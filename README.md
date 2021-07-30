@@ -29,7 +29,7 @@ Shortened links that redirects to the original. If the original is down, a cache
 `/` : A link is input on the page by the user and all `style` and `scripts` are stripped from it, only plain HTML is kept, hyperlinks are disabled too. The plain HTML code is then encoded using [base64encoding](https://docs.python.org/3/library/base64.html). The base64code is searched in data store and if found, a previously generated shortid is returned to the user. If this is the first time that link is being shortened, then a shortid is generated (using Hashids library) based on the current timestamp and added to data store alongwith link and base64code.
 
 The link, shortid, and base64code is stored to redis following the given schema:
-![redis_schema]()
+![redis_schema](/static/images/redis_schema.png)
 
 `/shortid` : shortid from the link is lookedup in data store and if not found an "Invalid shortlink!" message is shown to the user. If a valid shortid is found, then the corresponding base64code and link values are fetched. If the fetched link is up (returns a success response code) then user is redirected to it, else base64code fetched from store is decoded to display cached version of the webpage.
 

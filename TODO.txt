@@ -1,0 +1,16 @@
+[x] Test bs4 with scraping different kinds of websites (News/blogs/documentations)
+[x] Optimize database query result handling in code
+[x] Minimum Hashid size = 4
+[x] Modularize code into functions
+[x] Merge index methods
+
+[ ] Documentation and brief about techniques involved
+
+[ ] Frontend Development
+
+[x] Migrate database to postgre-sql, use ORM maybe or Redis
+[ ] Analyze incidents of 500 ISE and identify code breaking spots
+[ ] Deploy to Heroku
+[ ] End-to-End Testing
+ 
+[ ] Brainstorm possible usecases, enhancements, and showcase (https://archive.is/)

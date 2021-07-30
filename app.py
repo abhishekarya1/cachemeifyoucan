@@ -33,49 +33,46 @@ def gen_shortlink():
 		clean_link = link_cleaner(link)
 
 		shortid = None
-		#store field-value pair to key/hash(linkIndex) in Redis; duplicates keys get overwritten
-		if len(redis.keys(pattern=clean_link)) == 0:
+		#if a link
+		if redis.hexists('index', b64_code) is True:
+			shortid = str(redis.hget('index', b64_code), 'utf-8')
+			gen = "Existing shortlink returned."
+		else:
 			#generate shortid from current timestamp
 			hashid = Hashids(salt=constants.HASHID_SALT, min_length = 4)
 			shortid = hashid.encode(int(datetime.today().timestamp()))
 		
-			#store field-value pair to key/hash(clean_link) in Redis
-			redis.hset(clean_link, 'shortid', shortid)
-			redis.hset(clean_link, 'b64_code', b64_code)
+			#store field-value pair to key/hash(shortid) in Redis
+			redis.hset(shortid, 'link', clean_link)
+			redis.hset(shortid, 'b64_code', b64_code)
 		
-			#set link-shortid in linkIndex hash
-			redis.hset("linkIndex", shortid, clean_link)
-		else:
-			shortid = str(redis.hget(clean_link, 'shortid'), 'utf-8')
+			#set b64_code-shortid in index hash
+			redis.hset('index', b64_code, shortid)
+			gen = "New shortlink generated."
 
 		#append shortid to baseUrl
 		shortlink = constants.BASE_URL + "/" + shortid
 
 		#display shortlink to webpage
-		return render_template("index.html", shortlink=shortlink)
+		return render_template("index.html", shortlink=shortlink, gen=gen)
 
 @app.route("/<string:shortid>", methods = ['GET'])
 def expand_link(shortid):
 
-	#get link from linkIndex hash
-	link_b = redis.hget('linkIndex', shortid)
-
-	#if user entered invalid shorlink
-	if link_b is None:
+	#if user entered invalid shorlink; not found in any hash keys
+	if redis.keys(shortid) is None:
 		return "Invalid shortlink!"
 	#print(link_b)
 	#print(type(link_b))
 	#browser hits twice with GET :/
 	else:
-		link = str(link_b, 'utf-8')
-	
+		link = str(redis.hget(shortid, 'link'), 'utf-8')
+		base64code = str(redis.hget(shortid, 'b64_code'), 'utf-8')
 		#if og_link is up: redirect to og_link
 		if urllib.request.urlopen(link).getcode() != 200:		#changed to != for debug
 			return redirect(link, code=302)
-
 		#else: render cached version after decoding
 		else:
-			base64code = str(redis.hget(link, 'b64_code'), 'utf-8')
 			cached_html = str(base64.b64decode(base64code), 'utf-8')
 			return render_template("cached_html.html", cached_html=cached_html)
 

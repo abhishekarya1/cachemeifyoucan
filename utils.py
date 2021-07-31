@@ -30,3 +30,9 @@ def link_cleaner(link):
 	if clean_link[-1:] in ['/', '?']:
 		clean_link = clean_link[:-1]
 	return clean_link
+
+def validate_link(link):
+	if link.strip() == "":
+		return False
+	else:
+		return True

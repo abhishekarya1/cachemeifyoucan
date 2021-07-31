@@ -66,7 +66,7 @@ def gen_shortlink():
 def expand_link(shortid):
 
 	#if user entered invalid shorlink; not found in any hash keys
-	if redis.keys(shortid) is None:
+	if len(redis.keys(shortid)) == 0:
 		return "Invalid shortlink!"
 	#print(link_b)
 	#print(type(link_b))

@@ -37,5 +37,7 @@ def link_cleaner(link):
 def validate_link(link):
 	if link.strip() == "":
 		return False
+	elif link[0:4] != 'http':
+		return False
 	else: 
 		return validators.url(link)

@@ -1,11 +1,13 @@
 import base64
 from datetime import datetime
 import re
+import io
 import urllib.request
 
 from flask import Flask, render_template, request, redirect
 from hashids import Hashids
 from redis import Redis
+import pyqrcode
 
 #custom
 import constants
@@ -56,8 +58,14 @@ def gen_shortlink():
 			#append shortid to baseUrl
 			shortlink = constants.BASE_URL + "/" + shortid
 
+			#generate qr code
+			qr_svg = pyqrcode.create(shortlink)
+			buffer = io.BytesIO()
+			qr_svg.svg(buffer, scale=5)
+			qr = buffer.getvalue()
+			sqr = str(qr, 'utf-8')
 			#display shortlink to webpage
-			return render_template("index.html", shortlink=shortlink, gen=gen)
+			return render_template("index.html", shortlink=shortlink, gen=gen, qr=sqr)
 
 	else:
 		return "Reuest method not allowed!"
@@ -80,7 +88,7 @@ def expand_link(shortid):
 		#else: render cached version after decoding
 		else:
 			cached_html = str(base64.b64decode(base64code), 'utf-8')
-			return render_template("cached_html.html", cached_html=cached_html)
+			return render_template("cached_html.html", cached_html=cached_html, og_link=link)
 
 #main
 if __name__ == '__main__':

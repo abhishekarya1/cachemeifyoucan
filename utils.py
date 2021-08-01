@@ -1,5 +1,9 @@
-#beautifulsoup
 from bs4 import BeautifulSoup
+import re
+
+import validators
+
+import constants
 #from bs4.element import Comment
 
 def get_html(webpage):
@@ -21,7 +25,6 @@ def get_html(webpage):
 	return html
 	#b64decoded = str(base64.b64decode(b64code), 'utf-8')
 
-
 def link_cleaner(link):
 	#strip the url for spaces
 	clean_link = link.strip()
@@ -34,5 +37,5 @@ def link_cleaner(link):
 def validate_link(link):
 	if link.strip() == "":
 		return False
-	else:
-		return True
+	else: 
+		return validators.url(link)

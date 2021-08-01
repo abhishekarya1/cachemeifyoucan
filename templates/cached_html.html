@@ -1,12 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-	<title>Cached Page Content</title>
+<!doctype html>
+	<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+		<title>Cached Page Content</title>
+		<style>
+		#page-info {
+			color: red;
+			margin-top: 1rem;
+			margin-left: 0.5rem;
+			margin-bottom: 1rem;
+		}
+
+		#cached-page{
+			border:1px solid #000;
+			margin-top: 1rem;
+			margin: 0.5rem;
+			padding: 1rem;
+		}
+
+	</style>
 </head>
 <body>
-	<p style="color: red;"> You are viewing a cached version of this page. </p>
-{{ cached_html | safe}}
+	<p id="page-info"> You are viewing a cached version of this page. </p>
+	<div id="cached-page">
+		{{ cached_html | safe}}
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
